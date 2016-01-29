@@ -2,7 +2,7 @@
 
 ### TETRIS
 <!-- a description of the game -->
-![](https://en.wikipedia.org/wiki/File:Tetris-VeryFirstVersion.png#/media/File:Tetris-VeryFirstVersion.png)
+![](https://upload.wikimedia.org/wikipedia/en/7/7c/Tetris-VeryFirstVersion.png)
 
 ---
 

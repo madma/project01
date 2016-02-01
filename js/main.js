@@ -74,12 +74,16 @@ window.addEventListener("keyup", function(event) {
   console.log(event.keyCode);
   switch (event.keyCode) {
     case 37:
-      tetromino.x -= sideLength;
+      if (tetromino.x - sideLength >= 0) {
+        tetromino.x -= sideLength;
+      }
       arrowPressed = "Left";
       logIt("got Left", tetromino.x);
       break;
     case 39:
-      tetromino.x += sideLength;
+      if (tetromino.x + sideLength + sideLength*4 <= wellEl.width) {
+        tetromino.x += sideLength;
+      }
       arrowPressed = "Right";
       logIt("got Right", tetromino.x);
       break;

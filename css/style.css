@@ -1,0 +1,12 @@
+body {
+
+}
+
+div.main {
+}
+
+canvas {
+  display: block;
+  border: 5px solid red;
+  margin: 0 auto;
+}

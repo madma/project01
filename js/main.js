@@ -8,7 +8,8 @@ var sideLength = wellEl.width/10;
 var arrowPressed = "";
 var raf;
 var velocity = 2;
-var tetrominoes = [];
+var tetrominoes;
+var currentTetromino;
 
 var Tetromino = function() {
   x: 0,
@@ -56,11 +57,23 @@ function moveTetromino() {
 
 }
 
+function start() {
+  tetrominoes = [];
+  var tetromino = new Tetromino();
+  tetrominoes.push(tetromino);
+}
+
+function nextTetromino() {
+  var tetromino = new Tetromino();
+  tetrominoes.push(tetromino);
+}
+
 // makeTetromino(context);
 
 // View
 
 function draw() {
+  currentTetromino = tetrominoes[tetrominoes.length-1];
   if (tetromino.bottomClear) {
     context.clearRect(0, 0, wellEl.width, wellEl.height);
     tetromino.draw();

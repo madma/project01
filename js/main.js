@@ -68,13 +68,11 @@ window.addEventListener("keyup", function(event) {
       tetromino.x -= sideLength;
       arrowPressed = "Left";
       logIt("got Left", tetromino.x);
-      //raf = window.requestAnimationFrame(draw);
       break;
     case 39:
       tetromino.x += sideLength;
       arrowPressed = "Right";
       logIt("got Right", tetromino.x);
-      //raf = window.requestAnimationFrame(draw);
       break;
     default:
       return;

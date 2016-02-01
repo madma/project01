@@ -123,6 +123,17 @@ function logIt(x) {
 /*
 Pseudo-code
 
+var Tetromino = function() {
+  x: 0,
+  y: 0,
+  canvasPixelsOccupied: [indices of canvasPixels],
+  vy: velocity,
+  bottomClear: true,
+  bottomTestPt: {},
+  draw: function() {},
+}
+
+
 User starts a new game
   Well clears
   Initialize new tetromino
@@ -142,5 +153,31 @@ User starts a new game
           x += (+/-)well.width/10
           draw()
 
+arrayOfPlayedTetrominoesPixels = [store pixel if (r+g+b+a != 0)==>this.push(pixelIndex)] // USE JS SET SINCE PIXELS ARE UNIQUE
+arrayOfFreePixels = [start with all pixels]
+
+function collidePredicate() { // returns true or false for question: is there a collision?
+  test:
+    if tetromino falls (by vy):
+      tetromino.canvasPixels intersect with arrayOfPlayedTetrominoesPixels
+      if (new set length === 0):
+        return false
+      else:
+        return true
+}
+
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
 

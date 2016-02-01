@@ -7,10 +7,13 @@ var context = wellEl.getContext("2d");
 var sideLength = wellEl.width/10;
 var arrowPressed = "";
 var raf;
-var tetromino = {
+var velocity = 2;
+var tetrominoes = [];
+
+var Tetromino = function() {
   x: 0,
   y: 0,
-  vy: 2,
+  vy: velocity,
   bottomClear: true,
   bottomTestPt: {},
   draw: function() {
@@ -26,9 +29,9 @@ var tetromino = {
     } else {
       this.bottomClear = true;
     }
-
   }
-};
+}
+
 var timer; // setInterval function that re-draws game at a given speed
 var speed; // speed to call setInterval
 

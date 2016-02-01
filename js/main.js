@@ -11,7 +11,8 @@ var tetromino = {
   x: 0,
   y: 0,
   vy: 2,
-  baseline: [],
+  bottomClear: true,
+  bottomTestPt: {},
   draw: function() {
     context.beginPath();
     context.moveTo(this.x, this.y);
@@ -20,6 +21,12 @@ var tetromino = {
     context.lineTo(this.x, this.y+sideLength);
     context.closePath();
     context.fill();
+    if (context.isPointInPath(this.x, wellEl.height)) {
+      this.bottomClear = false;
+    } else {
+      this.bottomClear = true;
+    }
+
   }
 };
 var timer; // setInterval function that re-draws game at a given speed
@@ -51,10 +58,12 @@ function moveTetromino() {
 // View
 
 function draw() {
-  context.clearRect(0, 0, wellEl.width, wellEl.height);
-  tetromino.draw();
-  tetromino.y += tetromino.vy;
-  raf = window.requestAnimationFrame(draw);
+  if (tetromino.bottomClear) {
+    context.clearRect(0, 0, wellEl.width, wellEl.height);
+    tetromino.draw();
+    tetromino.y += tetromino.vy;
+    raf = window.requestAnimationFrame(draw);
+  }
 }
 
 window.addEventListener("keyup", function(event) {

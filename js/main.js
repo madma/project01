@@ -1,9 +1,16 @@
 console.log('main.js loaded!');
 
 // MODEL: Data Model
+
+// Canvas object, i.e. the "Well"
 var $well = $("#well"); // canvas object to contain played tetrominoes
 var wellEl = $well[0];
+var wellWidth = wellEl.width;
+var wellHeight = wellEl.height;
 var context = wellEl.getContext("2d");
+var canvasState; // array of indices of currently occupied pixels
+
+
 var sideLength = wellEl.width/10;
 var arrowPressed = "";
 var raf;
@@ -34,6 +41,12 @@ var speed; // speed to call setInterval
 
 
 // MODEL: Behavior
+function getDrawnPixels(img) {
+  imgData = img.data;
+
+}
+
+
 function makeTetromino(ctx) {
   var shapes = ["i", "j", "l", "o", "s", "t", "z"];
   var shape = Math.floor((Math.random()*shapes.length));

@@ -7,6 +7,7 @@ var bw = $board.width();
 var bh = $board.height();
 var side = bh/10;
 var $img = $("<img>", {id:"eiffel", src:"assets/eiffel_tower.png"});
+var gravity = 2;
 
 
 $img.css({width: side, height: 4*side});
@@ -32,16 +33,26 @@ function left(n) {
 function leftRight(event) {
   switch (event.keyCode) {
     case 37:
-      var old = $img.css("left");
-      $img.css("left", "-="+side);
+      if (parseInt($img.css("left"), 10) - side >= 0) {
+        $img.css("left", "-="+side);
+      }
       break;
     case 39:
-      var old = $img.css("left");
-      $img.css("left", "+="+side);
-      console.log(old);
+      if (parseInt($img.css("left"), 10) + $img.width() + side <= bw) {
+        $img.css("left", "+="+side);
+      }
+      break;
+    case 40:
+      moveDown($img);
       break;
     default:
       return;
+  }
+}
+
+function moveDown(el) {
+  if (parseInt(el.css("top"), 10) + el.height() + gravity < el.parent().height()) {
+    el.css("top", "+="+gravity);
   }
 }
 

@@ -7,7 +7,7 @@ var bw = $board.width();
 var bh = $board.height();
 var side = bh/10;
 var $img = $("<img>", {id:"eiffel", src:"assets/eiffel_tower.png"});
-var gravity = 2;
+var gravity = 10;
 
 
 $img.css({width: side, height: 4*side});
@@ -54,5 +54,12 @@ function moveDown(el) {
   if (parseInt(el.css("top"), 10) + el.height() + gravity < el.parent().height()) {
     el.css("top", "+="+gravity);
   }
+}
+
+function addNewPiece(id_, src_) {
+  $img = $("<img>", {id: id_, src: src_});
+  $img.css({width: side, height: 4*side});
+  $img.css({position: "relative", left: relX(bw/2, $img) , top: relY(bh/2, $img)});
+  $board.prepend($img);
 }
 

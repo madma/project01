@@ -12,7 +12,8 @@ canvas {
 }
 
 div.board {
-  width: 500px;
-  height: 1000px;
+  width: 400px;
+  height: 800px;
   border: 5px solid red;
+  margin: 0 auto;
 }

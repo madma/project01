@@ -80,6 +80,7 @@ function transpose(piece) {
 
 function rotate(piece) {
   clearPrev(piece);
+  var prevCoords = piece.coords;
   for (var i = 0; i < 4; i++) {
     var cR = piece.coords[i][0];
     var cC = piece.coords[i][1];
@@ -87,9 +88,15 @@ function rotate(piece) {
     var pC = piece.pivotPt[1];
     piece.coords[i][0] = rotateTransformRow(rad90Deg, cR, cC, pR, pC);
     piece.coords[i][1] = rotateTransformCol(rad90Deg, cR, cC, pR, pC);
-    tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
+    if (tetris[piece.coords[i][0]][piece.coords[i][1]] === 1) {
+      piece.coords = prevCoords;
+      break;
+    } else {
+      tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
+    }
   }
   printTetris();
+  return true;
 }
 
 function rotateTransformRow(angleInRadians, currentRow, currentCol, pivotRow, pivotCol) {
@@ -109,6 +116,16 @@ function moveDown(piece) {
     tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
   }
   printTetris();
+}
+
+// TODO: check if move requested is valid
+function moveValidate(piece, i, prevCoords) {
+  if (tetris[piece.coords[i][0]][piece.coords[i][1]] === 1) {
+    piece.coords = prevCoords;
+    return false;
+  } else {
+    tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
+  }
 }
 
 function clearPrev(piece) {

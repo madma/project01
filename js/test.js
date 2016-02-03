@@ -1,3 +1,5 @@
+// MODEL: Data
+
 var tetris = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -26,19 +28,72 @@ var currentPiece;
 
 var rad90Deg = 0.5*Math.PI;
 
-var SquareP = function() {
+var Opiece = function() {
   this.coords = [[0, 3], [0, 4], [1, 3], [1, 4]];
 }
 
-var ColumnP = function() {
+Opiece.prototype.getCoords = function() {return this.coords;}
+
+var Ipiece = function() {
   this.coords = [[0, 3], [0, 4], [0, 5], [0, 6]];
   this.pivotPt = this.coords[2];
 }
 
-var pieces = [SquareP, ColumnP];
+Ipiece.prototype.getCoords = function() {return this.coords;}
 
-// new piece, create a `randomInt`, and call `new` on pieces[randomInt] and
-// assign it to currentPiece
+var Spiece = function() {
+  this.coords = [[0, 3], [0, 4], [1, 2], [1, 3]];
+  this.pivotPt = this.coords[0];
+}
+
+Spiece.prototype.getCoords = function() {return this.coords;}
+
+var Zpiece = function() {
+  this.coords = [[0, 2], [0, 3], [1, 3], [1, 4]];
+  this.pivotPt = this.coords[1];
+}
+
+Zpiece.prototype.getCoords = function() {return this.coords;}
+
+var Lpiece = function() {
+  this.coords = [[0, 2], [0, 3], [0, 4], [1, 2]];
+  this.pivotPt = this.coords[1];
+}
+
+Lpiece.prototype.getCoords = function() {return this.coords;}
+
+var Jpiece = function() {
+  this.coords = [[0, 2], [0, 3], [0, 4], [1, 4]];
+  this.pivotPt = this.coords[1];
+}
+
+Jpiece.prototype.getCoords = function() {return this.coords;}
+
+var Tpiece = function() {
+  this.coords = [[0, 2], [0, 3], [0, 4], [1, 3]];
+  this.pivotPt = this.coords[1];
+}
+
+Tpiece.prototype.getCoords = function() {return this.coords;}
+
+var pieces = [Opiece, Ipiece, Spiece, Zpiece, Lpiece, Jpiece, Tpiece];
+
+
+// MODEL: Behavior
+
+/*
+
+Game play:
+1. initialize currentPiece global var with a new random piece
+2. check that currentPiece's initial coordinates are available, i.e. value at tetris[i, j] === 0
+3. if initial coords of currentPiece available, add piece to board
+4. every t seconds (i.e. tick interval) move the currentPiece down if new coords available, else currentPiece lands and re-assigned to new random piece (1.)
+5. on keyup "ArrowLeft" (keyup.keycode = 37) or "ArrowRight" (39) translate piece one unit L or R if new coords available
+6. on keyup "ArrowUp" (38) rotate piece about its pivot point if new coords available
+7. check if any rows complete
+  a. clear rows
+  b. tetris pop full row, prepend new blank row
+*/
 
 function randPiece() {
   var i = Math.floor(Math.random()*pieces.length);
@@ -47,19 +102,23 @@ function randPiece() {
 
 
 function addPiece(piece) {
-  //clearPrev(piece);
-  var prevCoords = piece.coords;
-  for (var i = 0; i < 4; i++) {
-    if (!movePredicate(piece, i, prevCoords)) {
-      //unClearPrev(piece)
-      return false;
+  var checksum = 0;
+  for(var i = 0; i < 4; i++) {
+    checksum += tetris[piece.coords[i][0]][piece.coords[i][1]];
+  }
+  if (checksum !== 0) {
+    return false;
+  } else {
+    for (var i = 0; i < 4; i++) {
+        tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
     }
   }
   printTetris();
   return true;
 }
 
-function moveHo(piece, keypress) {
+
+function moveLR(piece, keypress) {
   clearPrev(piece);
   var prevCoords = piece.coords;
   if (keypress === 39) {
@@ -83,6 +142,7 @@ function moveHo(piece, keypress) {
   return true;
 }
 
+
 function transpose(piece) {
   clearPrev(piece);
   var prevCoords = piece.coords;
@@ -96,6 +156,7 @@ function transpose(piece) {
   printTetris();
   return true;
 }
+
 
 function rotate(piece) {
   clearPrev(piece);
@@ -126,22 +187,50 @@ function rotateTransformCol(angleInRadians, currentRow, currentCol, pivotRow, pi
   return transformedRow;
 }
 
+
 function moveDown(piece) {
-  printTetris();
   clearPrev(piece);
-  printTetris();
-  var prevCoords = piece.coords;
+  var prevCoords = piece.getCoords();
+  var checksum = 0;
   for(var i = 0; i < 4; i++) {
     piece.coords[i][0] += 1;
-    if (!movePredicate(piece, i, prevCoords)) {
-      unClearPrev(piece)
-      printTetris();
-      return false;
-    }
+    checksum += tetris[piece.coords[i][0]][piece.coords[i][1]];
   }
-  printTetris();
-  return true;
+  console.log(checksum);
+  if (checksum === 0) {
+    for(var i = 0; i < 4; i++) {
+      tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
+    }
+    printTetris();
+    return true;
+  } else {
+    piece.coords = prevCoords;
+    unClearPrev(piece)
+    printTetris();
+    return false;
+  }
 }
+
+// function moveDown(piece) {
+//   clearPrev(piece);
+//   var prevCoords = piece.coords;
+//   var checksum = 0;
+//   for(var i = 0; i < 4; i++) {
+//     piece.coords[i][0] += 1;
+//     checksum += tetris[piece.coords[i][0]][piece.coords[i][1]];
+//   }
+//   if (checksum !== 0) {
+//     piece.coords = prevCoords;
+//     unClearPrev(piece);
+//     return false;
+//   } else {
+//     for (var i = 0; i < 4; i++) {
+//         tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
+//     }
+//   }
+//   printTetris();
+//   return true;
+// }
 
 // TODO: check if move requested is valid
 function movePredicate(piece, i, prevCoords) {

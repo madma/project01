@@ -10,6 +10,8 @@
 
 ![Tetris Pieces](http://i.imgur.com/65G37Aq.png)
 
+![Tetris Pieces: Rotations](http://colinfahey.com/tetris/tetris_diagram_pieces_orientations_new.jpg)
+
 ---
 
 ### Technologies

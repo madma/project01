@@ -211,26 +211,8 @@ function moveDown(piece) {
   }
 }
 
-// function moveDown(piece) {
-//   clearPrev(piece);
-//   var prevCoords = piece.coords;
-//   var checksum = 0;
-//   for(var i = 0; i < 4; i++) {
-//     piece.coords[i][0] += 1;
-//     checksum += tetris[piece.coords[i][0]][piece.coords[i][1]];
-//   }
-//   if (checksum !== 0) {
-//     piece.coords = prevCoords;
-//     unClearPrev(piece);
-//     return false;
-//   } else {
-//     for (var i = 0; i < 4; i++) {
-//         tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
-//     }
-//   }
-//   printTetris();
-//   return true;
-// }
+
+
 
 // TODO: check if move requested is valid
 function movePredicate(piece, i, prevCoords) {

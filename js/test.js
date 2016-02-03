@@ -81,6 +81,8 @@ var isIn = function(coord, listOfCoords) {
 
 function Piece(type) {
   this.type = type.toUpperCase();
+  this.orientation = 0;
+
   switch (this.type) {
     case "O":
 
@@ -94,7 +96,6 @@ function Piece(type) {
       this.coords  = [
         [ [1, 1], [2, 1], [1, 2], [2, 2] ]
       ];
-      this.orientation = 0;
       this.anchor = [4, -1];
       break;
     case "I":
@@ -117,29 +118,95 @@ function Piece(type) {
         [ [0, 1], [1, 1], [2, 1], [3, 1] ],
         [ [2, 0], [2, 1], [2, 2], [2, 3] ]
       ];
-      this.orientation = 0;
       this.anchor = [4, -1];
-
       break;
     case "S":
-      this.coords  = [[0, 3], [0, 4], [1, 2], [1, 3]];
-      this.pivotPt = this.coords[0];
+
+      // ORIENTATION 0
+      // 0 A
+      // 1     X X
+      // 2   X X
+      // 3
+      //   0 1 2 3
+
+      // ORIENTATION 1
+      // 0 A   X
+      // 1     X X
+      // 2       X
+      // 3
+      //   0 1 2 3
+
+      this.coords  = [
+        [ [1, 2], [2, 2], [2, 1], [3, 1] ],
+        [ [2, 0], [2, 1], [3, 1], [3, 2] ],
+      ];
+      this.anchor = [3, -1];
       break;
     case "Z":
-      this.coords  = [[0, 2], [0, 3], [1, 3], [1, 4]];
-      this.pivotPt = this.coords[1];
+
+      // ORIENTATION 0  // ORIENTATION 1  //
+      // 0 A            // 0 A     X      //
+      // 1   X X        // 1     X X      //
+      // 2     X X      // 2     X        //
+      // 3              // 3              //
+      //   0 1 2 3      //   0 1 2 3      //
+
+      this.coords  = [
+        [ [1, 1], [2, 1], [2, 2], [3, 2] ],
+        [ [2, 1], [2, 2], [3, 0], [3, 1] ],
+      ];
+      this.anchor = [3, -1];
       break;
     case "L":
-      this.coords  = [[0, 2], [0, 3], [0, 4], [1, 2]];
-      this.pivotPt = this.coords[1];
+
+      // ORIENTATION 0  // ORIENTATION 1  // ORIENTATION 2  // ORIENTATION 3
+      // 0 A            // 0 A   X        // 0 A     X      // 0 A X X
+      // 1   X X X      // 1     X        // 1   X X X      // 1     X
+      // 2   X          // 2     X X      // 2              // 2     X
+      // 3              // 3              // 3              // 3
+      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3
+
+      this.coords  = [
+        [ [1, 1], [1, 2], [2, 1], [3, 1] ],
+        [ [2, 0], [2, 1], [2, 2], [3, 2] ],
+        [ [1, 1], [2, 1], [3, 0], [3, 1] ],
+        [ [1, 0], [2, 0], [2, 1], [2, 2] ]
+      ];
+      this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
     case "J":
-      this.coords  = [[0, 2], [0, 3], [0, 4], [1, 4]];
-      this.pivotPt = this.coords[1];
+
+      // ORIENTATION 0  // ORIENTATION 1  // ORIENTATION 2  // ORIENTATION 3
+      // 0 A            // 0 A   X X      // 0 A X          // 0 A   X
+      // 1   X X X      // 1     X        // 1   X X X      // 1     X
+      // 2       X      // 2     X        // 2              // 2   X X
+      // 3              // 3              // 3              // 3
+      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3
+
+      this.coords  = [
+        [ [1, 1], [2, 1], [3, 1], [3, 2] ],
+        [ [2, 0], [2, 1], [2, 2], [3, 0] ],
+        [ [1, 0], [1, 1], [2, 1], [3, 1] ],
+        [ [1, 2], [2, 0], [2, 1], [2, 2] ]
+      ];
+      this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
     case "T":
-      this.coords  = [[0, 2], [0, 3], [0, 4], [1, 3]];
-      this.pivotPt = this.coords[1];
+
+      // ORIENTATION 0  // ORIENTATION 1  // ORIENTATION 2  // ORIENTATION 3
+      // 0 A            // 0 A   X        // 0 A   X        // 0 A   X
+      // 1   X X X      // 1     X X      // 1   X X X      // 1   X X
+      // 2     X        // 2     X        // 2              // 2     X
+      // 3              // 3              // 3              // 3
+      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3
+
+      this.coords  = [
+        [ [1, 1], [2, 2], [2, 1], [3, 1] ],
+        [ [2, 0], [2, 1], [2, 2], [3, 1] ],
+        [ [1, 1], [2, 0], [2, 1], [3, 1] ],
+        [ [1, 1], [2, 0], [2, 1], [2, 2] ]
+      ];
+      this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
   }
 }

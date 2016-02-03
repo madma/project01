@@ -3,6 +3,7 @@ body {
 }
 
 div.main {
+  position: absolute;
 }
 
 canvas {
@@ -12,6 +13,7 @@ canvas {
 }
 
 div.board {
+  position: absolute;
   width: 400px;
   height: 800px;
   border: 5px solid red;

@@ -28,41 +28,6 @@ var currentPiece;
 
 var rad90Deg = 0.5*Math.PI;
 
-var Opiece = function() {
-  this.coords = [[0, 3], [0, 4], [1, 3], [1, 4]];
-}
-
-var Ipiece = function() {
-  this.coords = [[0, 3], [0, 4], [0, 5], [0, 6]];
-  this.pivotPt = this.coords[2];
-}
-
-var Spiece = function() {
-  this.coords = [[0, 3], [0, 4], [1, 2], [1, 3]];
-  this.pivotPt = this.coords[0];
-}
-
-var Zpiece = function() {
-  this.coords = [[0, 2], [0, 3], [1, 3], [1, 4]];
-  this.pivotPt = this.coords[1];
-}
-
-var Lpiece = function() {
-  this.coords = [[0, 2], [0, 3], [0, 4], [1, 2]];
-  this.pivotPt = this.coords[1];
-}
-
-var Jpiece = function() {
-  this.coords = [[0, 2], [0, 3], [0, 4], [1, 4]];
-  this.pivotPt = this.coords[1];
-}
-
-var Tpiece = function() {
-  this.coords = [[0, 2], [0, 3], [0, 4], [1, 3]];
-  this.pivotPt = this.coords[1];
-}
-
-
 //////////////
 
 var compare = function(a1, a2) {
@@ -96,65 +61,60 @@ function Piece(type) {
       this.coords  = [
         [ [1, 1], [2, 1], [1, 2], [2, 2] ]
       ];
+      this.bounds = [ // anchor bounds for movement
+        {left: -1, right: 7}
+      ];
       this.anchor = [4, -1];
       break;
     case "I":
 
-      // ORIENTATION 0
-      // 0 A
-      // 1 X X X X
-      // 2
-      // 3
-      //   0 1 2 3
-
-      // ORIENTATION 1
-      // 0 A   X
-      // 1     X
-      // 2     X
-      // 3     X
-      //   0 1 2 3
+      // ORIENTATION 0 // ORIENTATION 1
+      // 0 A           // 0 A   X
+      // 1 X X X X     // 1     X
+      // 2             // 2     X
+      // 3             // 3     X
+      //   0 1 2 3     //   0 1 2 3
 
       this.coords  = [
         [ [0, 1], [1, 1], [2, 1], [3, 1] ],
         [ [2, 0], [2, 1], [2, 2], [2, 3] ]
       ];
+      this.bounds = [
+        {left: 0,  right: 6},
+        {left: -2, right: 8}
+      ];
       this.anchor = [4, -1];
       break;
     case "S":
 
-      // ORIENTATION 0
-      // 0 A
-      // 1     X X
-      // 2   X X
-      // 3
-      //   0 1 2 3
-
-      // ORIENTATION 1
-      // 0 A   X
-      // 1     X X
-      // 2       X
-      // 3
-      //   0 1 2 3
+      // ORIENTATION 0 // ORIENTATION 1
+      // 0 A           // 0 A   X
+      // 1     X X     // 1     X X
+      // 2   X X       // 2       X
+      // 3             // 3
+      //   0 1 2 3     //   0 1 2 3
 
       this.coords  = [
         [ [1, 2], [2, 2], [2, 1], [3, 1] ],
         [ [2, 0], [2, 1], [3, 1], [3, 2] ],
       ];
+      this.bounds = []; // TODO: MD
       this.anchor = [3, -1];
       break;
     case "Z":
 
-      // ORIENTATION 0  // ORIENTATION 1  //
-      // 0 A            // 0 A     X      //
-      // 1   X X        // 1     X X      //
-      // 2     X X      // 2     X        //
-      // 3              // 3              //
-      //   0 1 2 3      //   0 1 2 3      //
+      // ORIENTATION 0  // ORIENTATION 1
+      // 0 A            // 0 A     X
+      // 1   X X        // 1     X X
+      // 2     X X      // 2     X
+      // 3              // 3
+      //   0 1 2 3      //   0 1 2 3
 
       this.coords  = [
         [ [1, 1], [2, 1], [2, 2], [3, 2] ],
         [ [2, 1], [2, 2], [3, 0], [3, 1] ],
       ];
+      this.bounds = []; // TODO: MD
       this.anchor = [3, -1];
       break;
     case "L":
@@ -172,6 +132,7 @@ function Piece(type) {
         [ [1, 1], [2, 1], [3, 0], [3, 1] ],
         [ [1, 0], [2, 0], [2, 1], [2, 2] ]
       ];
+      this.bounds = []; // TODO: MD
       this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
     case "J":
@@ -189,6 +150,7 @@ function Piece(type) {
         [ [1, 0], [1, 1], [2, 1], [3, 1] ],
         [ [1, 2], [2, 0], [2, 1], [2, 2] ]
       ];
+      this.bounds = []; // TODO: MD
       this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
     case "T":
@@ -206,6 +168,7 @@ function Piece(type) {
         [ [1, 1], [2, 0], [2, 1], [3, 1] ],
         [ [1, 1], [2, 0], [2, 1], [2, 2] ]
       ];
+      this.bounds = []; // TODO: MD
       this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
   }
@@ -224,6 +187,10 @@ Piece.prototype.getBoardCoords = function() {
     [currentCoords[2][0] + this.anchor[0], currentCoords[2][1] + this.anchor[1]],
     [currentCoords[3][0] + this.anchor[0], currentCoords[3][1] + this.anchor[1]]
   ];
+};
+
+Piece.prototype.getBounds = function() {
+  return this.bounds[this.orientation];
 };
 
 Piece.prototype.calculateCells = function() {
@@ -247,6 +214,45 @@ Piece.prototype.rotate = function() {
   } else {
     this.orientation = 0;
   }
+
+  // TODO: translate anchor based on bounds
+  // if anchor[x] > rightBound => anchor[x] = rightBound
+  // if anchor[x] < leftBound  => anchor[x] = leftBound
+};
+
+
+Piece.prototype.moveDown = function() {
+  // TODO: determine if there is a occupied cell below
+  // you, if so, you can't move
+  this.anchor[1]++;
+};
+
+// Moving left and right happens within bounds...
+
+// BOARD: 0 1 2 3 4 5 6 7 8 9
+// PIECE:
+//     -1  |
+//     ┏━━━━━━━┓
+//     ┃0 1 2 3┃
+//     ┃  X X  ┃
+//     ┃  X X  ┃
+//     ┃       ┃
+//     ┗━━━━━━━┛        7   |
+//                     ┏━━━━━━━┓
+//                     ┃0 1 2 3┃
+//                     ┃  X X  ┃
+//                     ┃  X X  ┃
+//                     ┃       ┃
+//                     ┗━━━━━━━┛
+
+Piece.prototype.moveLeft = function() {
+  var bound = this.getBounds().left;
+  if (this.anchor[0] > bound) this.anchor[0]--;
+};
+
+Piece.prototype.moveRight = function() {
+  var bound = this.getBounds().right;
+  if (this.anchor[0] < bound) this.anchor[0]++;
 };
 
 Piece.random = function() {
@@ -255,7 +261,8 @@ Piece.random = function() {
   return new Piece(types[index]);
 };
 
-var pieces = [Opiece, Ipiece, Spiece, Zpiece, Lpiece, Jpiece, Tpiece];
+
+
 
 
 // MODEL: Behavior

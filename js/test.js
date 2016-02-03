@@ -55,27 +55,31 @@ function addPiece(piece) {
 
 function moveHo(piece, keypress) {
   clearPrev(piece);
+  var prevCoords = piece.coords;
   if (keypress === 39) {
     for(var i = 0; i < 4; i++) {
       piece.coords[i][1] += 1;
-      tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
+      if (!movePredicate(piece, i, prevCoords)) return false;
     }
   } else if (keypress === 37) {
     for (var i = 0; i < 4; i++) {
       piece.coords[i][1] -= 1;
-      tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
+      if (!movePredicate(piece, i, prevCoords)) return false;
     }
   }
   printTetris();
+  return true;
 }
 
 function transpose(piece) {
   clearPrev(piece);
+  var prevCoords = piece.coords;
   for (var i = 0; i < 4; i++) {
     piece.coords[i].reverse();
-    tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
+    if (!movePredicate(piece, i, prevCoords)) return false;
   }
   printTetris();
+  return true;
 }
 
 function rotate(piece) {
@@ -88,12 +92,7 @@ function rotate(piece) {
     var pC = piece.pivotPt[1];
     piece.coords[i][0] = rotateTransformRow(rad90Deg, cR, cC, pR, pC);
     piece.coords[i][1] = rotateTransformCol(rad90Deg, cR, cC, pR, pC);
-    if (tetris[piece.coords[i][0]][piece.coords[i][1]] === 1) {
-      piece.coords = prevCoords;
-      break;
-    } else {
-      tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
-    }
+    if (!movePredicate(piece, i, prevCoords)) return false;
   }
   printTetris();
   return true;
@@ -111,20 +110,23 @@ function rotateTransformCol(angleInRadians, currentRow, currentCol, pivotRow, pi
 
 function moveDown(piece) {
   clearPrev(piece);
+  var prevCoords = piece.coords;
   for(var i = 0; i < 4; i++) {
     piece.coords[i][0] += 1;
-    tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
+    if (!movePredicate(piece, i, prevCoords)) return false;
   }
   printTetris();
+  return true;
 }
 
 // TODO: check if move requested is valid
-function moveValidate(piece, i, prevCoords) {
+function movePredicate(piece, i, prevCoords) {
   if (tetris[piece.coords[i][0]][piece.coords[i][1]] === 1) {
     piece.coords = prevCoords;
     return false;
   } else {
     tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
+    return true;
   }
 }
 

@@ -223,7 +223,7 @@ Piece.prototype.rotate = function() {
 
 Piece.prototype.moveDown = function() {
   // TODO: determine if there is a occupied cell below
-  // you, if so, you can't move
+  // you, if so => board.lockPiece()
   this.anchor[1]++;
 };
 
@@ -262,6 +262,80 @@ Piece.random = function() {
 };
 
 
+// FIXME: MD remove after testing
+var o = "O",
+    t = "T",
+    s = "S",
+    z = "Z",
+    l = "L",
+    j = "J",
+    i = "I";
+
+// Board
+var board = {};
+
+board.upcomingPiece = Piece.random();
+board.currentPiece  = undefined;
+
+board.cells = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, t, 0, o, o, 0, s, s, 0],
+  [0, t, t, t, o, o, s, s, 0, 0]
+];
+
+board.loadPiece = function() {
+  board.currentPiece  = board.upcomingPiece;
+  board.upcomingPiece = Piece.random();
+};
+
+board.lockPiece = function() {
+  var pieceCells = board.currentPiece.getBoardCoords();
+
+  for (var i = 0; i < 4; i++) {
+    row = pieceCells[i][1];
+    col = pieceCells[i][0];
+    board[row][col] = board.currentPiece.type;
+  }
+
+  // TODO: MD check for full rows, remove them and score
+
+  board.loadPiece();
+};
+
+board.calculate = function() {
+  var print = "";
+
+  var pieceCells = board.currentPiece.getBoardCoords();
+
+  for (var row = 0; row < 20; row++) {
+    for (var col = 0; col < 10; col++) {
+      if (isIn([col,row], pieceCells)) {
+        print += board.currentPiece.type + ' ';
+      } else {
+        print += board.cells[row][col] + ' ';
+      }
+    }
+    print += '\n';
+  }
+  console.log(print);
+};
 
 
 

@@ -47,10 +47,16 @@ function randPiece() {
 
 
 function addPiece(piece) {
+  //clearPrev(piece);
+  var prevCoords = piece.coords;
   for (var i = 0; i < 4; i++) {
-    tetris[piece.coords[i][0]][piece.coords[i][1]] = 1;
+    if (!movePredicate(piece, i, prevCoords)) {
+      //unClearPrev(piece)
+      return false;
+    }
   }
   printTetris();
+  return true;
 }
 
 function moveHo(piece, keypress) {
@@ -59,12 +65,18 @@ function moveHo(piece, keypress) {
   if (keypress === 39) {
     for(var i = 0; i < 4; i++) {
       piece.coords[i][1] += 1;
-      if (!movePredicate(piece, i, prevCoords)) return false;
+      if (!movePredicate(piece, i, prevCoords)) {
+        unClearPrev(piece)
+        return false;
+      }
     }
   } else if (keypress === 37) {
     for (var i = 0; i < 4; i++) {
       piece.coords[i][1] -= 1;
-      if (!movePredicate(piece, i, prevCoords)) return false;
+      if (!movePredicate(piece, i, prevCoords)) {
+        unClearPrev(piece)
+        return false;
+      }
     }
   }
   printTetris();
@@ -76,7 +88,10 @@ function transpose(piece) {
   var prevCoords = piece.coords;
   for (var i = 0; i < 4; i++) {
     piece.coords[i].reverse();
-    if (!movePredicate(piece, i, prevCoords)) return false;
+    if (!movePredicate(piece, i, prevCoords)) {
+      unClearPrev(piece)
+      return false;
+    }
   }
   printTetris();
   return true;
@@ -92,7 +107,10 @@ function rotate(piece) {
     var pC = piece.pivotPt[1];
     piece.coords[i][0] = rotateTransformRow(rad90Deg, cR, cC, pR, pC);
     piece.coords[i][1] = rotateTransformCol(rad90Deg, cR, cC, pR, pC);
-    if (!movePredicate(piece, i, prevCoords)) return false;
+    if (!movePredicate(piece, i, prevCoords)) {
+      unClearPrev(piece)
+      return false;
+    }
   }
   printTetris();
   return true;
@@ -109,11 +127,17 @@ function rotateTransformCol(angleInRadians, currentRow, currentCol, pivotRow, pi
 }
 
 function moveDown(piece) {
+  printTetris();
   clearPrev(piece);
+  printTetris();
   var prevCoords = piece.coords;
   for(var i = 0; i < 4; i++) {
     piece.coords[i][0] += 1;
-    if (!movePredicate(piece, i, prevCoords)) return false;
+    if (!movePredicate(piece, i, prevCoords)) {
+      unClearPrev(piece)
+      printTetris();
+      return false;
+    }
   }
   printTetris();
   return true;
@@ -121,6 +145,7 @@ function moveDown(piece) {
 
 // TODO: check if move requested is valid
 function movePredicate(piece, i, prevCoords) {
+  console.log("currently this tetris val is: " + tetris[piece.coords[i][0]][piece.coords[i][1]]);
   if (tetris[piece.coords[i][0]][piece.coords[i][1]] === 1) {
     piece.coords = prevCoords;
     return false;
@@ -135,6 +160,13 @@ function clearPrev(piece) {
   tetris[piece.coords[1][0]][piece.coords[1][1]]     = 0;
   tetris[piece.coords[2][0]][piece.coords[2][1]]     = 0;
   tetris[piece.coords[3][0]][piece.coords[3][1]]     = 0;
+}
+
+function unClearPrev(piece) {
+  tetris[piece.coords[0][0]][piece.coords[0][1]]     = 1;
+  tetris[piece.coords[1][0]][piece.coords[1][1]]     = 1;
+  tetris[piece.coords[2][0]][piece.coords[2][1]]     = 1;
+  tetris[piece.coords[3][0]][piece.coords[3][1]]     = 1;
 }
 
 function printTetris() {

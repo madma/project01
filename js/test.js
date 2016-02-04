@@ -20,7 +20,6 @@ var tetris = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
@@ -52,14 +51,14 @@ function Piece(type) {
     case "O":
 
       // ORIENTATION 0
+      //   0 1 2 3
       // 0 A
       // 1   X X
       // 2   X X
       // 3
-      //   0 1 2 3
 
       this.coords  = [
-        [ [1, 1], [2, 1], [1, 2], [2, 2] ]
+        [ [1, 1], [1, 2], [2, 1], [2, 2] ]
       ];
       this.bounds = [ // anchor bounds for movement
         {left: -1, right: 7}
@@ -69,11 +68,11 @@ function Piece(type) {
     case "I":
 
       // ORIENTATION 0 // ORIENTATION 1
+      //   0 1 2 3     //   0 1 2 3
       // 0 A           // 0 A   X
       // 1 X X X X     // 1     X
       // 2             // 2     X
       // 3             // 3     X
-      //   0 1 2 3     //   0 1 2 3
 
       this.coords  = [
         [ [0, 1], [1, 1], [2, 1], [3, 1] ],
@@ -88,43 +87,49 @@ function Piece(type) {
     case "S":
 
       // ORIENTATION 0 // ORIENTATION 1
+      //   0 1 2 3     //   0 1 2 3
       // 0 A           // 0 A   X
       // 1     X X     // 1     X X
       // 2   X X       // 2       X
       // 3             // 3
-      //   0 1 2 3     //   0 1 2 3
 
       this.coords  = [
-        [ [1, 2], [2, 2], [2, 1], [3, 1] ],
+        [ [1, 2], [2, 1], [2, 2], [3, 1] ],
         [ [2, 0], [2, 1], [3, 1], [3, 2] ],
       ];
-      this.bounds = []; // TODO: MD
+      this.bounds = [
+        {left: -1, right: 6},
+        {left: -2, right: 6}
+      ];
       this.anchor = [3, -1];
       break;
     case "Z":
 
       // ORIENTATION 0  // ORIENTATION 1
+      //   0 1 2 3      //   0 1 2 3
       // 0 A            // 0 A     X
       // 1   X X        // 1     X X
       // 2     X X      // 2     X
       // 3              // 3
-      //   0 1 2 3      //   0 1 2 3
 
       this.coords  = [
         [ [1, 1], [2, 1], [2, 2], [3, 2] ],
         [ [2, 1], [2, 2], [3, 0], [3, 1] ],
       ];
-      this.bounds = []; // TODO: MD
+      this.bounds = [
+        {left: -1, right: 6},
+        {left: -2, right: 6}
+      ];
       this.anchor = [3, -1];
       break;
     case "L":
 
       // ORIENTATION 0  // ORIENTATION 1  // ORIENTATION 2  // ORIENTATION 3
+      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3
       // 0 A            // 0 A   X        // 0 A     X      // 0 A X X
       // 1   X X X      // 1     X        // 1   X X X      // 1     X
       // 2   X          // 2     X X      // 2              // 2     X
       // 3              // 3              // 3              // 3
-      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3
 
       this.coords  = [
         [ [1, 1], [1, 2], [2, 1], [3, 1] ],
@@ -132,17 +137,22 @@ function Piece(type) {
         [ [1, 1], [2, 1], [3, 0], [3, 1] ],
         [ [1, 0], [2, 0], [2, 1], [2, 2] ]
       ];
-      this.bounds = []; // TODO: MD
+      this.bounds = [
+        {left: -1, right: 6},
+        {left: -2, right: 6},
+        {left: -1, right: 6},
+        {left: -1, right: 7}
+      ];
       this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
     case "J":
 
       // ORIENTATION 0  // ORIENTATION 1  // ORIENTATION 2  // ORIENTATION 3
+      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3
       // 0 A            // 0 A   X X      // 0 A X          // 0 A   X
       // 1   X X X      // 1     X        // 1   X X X      // 1     X
       // 2       X      // 2     X        // 2              // 2   X X
       // 3              // 3              // 3              // 3
-      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3
 
       this.coords  = [
         [ [1, 1], [2, 1], [3, 1], [3, 2] ],
@@ -150,17 +160,22 @@ function Piece(type) {
         [ [1, 0], [1, 1], [2, 1], [3, 1] ],
         [ [1, 2], [2, 0], [2, 1], [2, 2] ]
       ];
-      this.bounds = []; // TODO: MD
+      this.bounds = [
+        {left: -1, right: 6},
+        {left: -2, right: 6},
+        {left: -1, right: 6},
+        {left: -1, right: 7}
+      ];
       this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
     case "T":
 
       // ORIENTATION 0  // ORIENTATION 1  // ORIENTATION 2  // ORIENTATION 3
+      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3
       // 0 A            // 0 A   X        // 0 A   X        // 0 A   X
       // 1   X X X      // 1     X X      // 1   X X X      // 1   X X
       // 2     X        // 2     X        // 2              // 2     X
       // 3              // 3              // 3              // 3
-      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3
 
       this.coords  = [
         [ [1, 1], [2, 2], [2, 1], [3, 1] ],
@@ -168,7 +183,12 @@ function Piece(type) {
         [ [1, 1], [2, 0], [2, 1], [3, 1] ],
         [ [1, 1], [2, 0], [2, 1], [2, 2] ]
       ];
-      this.bounds = []; // TODO: MD
+      this.bounds = [
+        {left: -1, right: 6},
+        {left: -2, right: 6},
+        {left: -1, right: 6},
+        {left: -1, right: 7}
+      ];
       this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
   }

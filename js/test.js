@@ -60,8 +60,11 @@ function Piece(type) {
       this.coords  = [
         [ [1, 1], [1, 2], [2, 1], [2, 2] ]
       ];
-      this.bounds = [ // anchor bounds for movement
-        {left: -1, right: 7}
+      this.bounds = [
+        {left: [ [0, 1], [0, 2] ], right: [ [3, 1], [3, 2] ], down: [ [1, 3], [2, 3] ]}
+      ];
+      this.anchorBounds = [ // anchor bounds for movement
+        {left: -1, right: 7, bottom: 17}
       ];
       this.anchor = [4, -1];
       break;
@@ -79,8 +82,12 @@ function Piece(type) {
         [ [2, 0], [2, 1], [2, 2], [2, 3] ]
       ];
       this.bounds = [
-        {left: 0,  right: 6},
-        {left: -2, right: 8}
+        {left: [ [-1, 1] ],                        right: [ [4, 1] ],                         down: [ [0, 2], [1, 2], [2, 2], [3,2] ]},
+        {left: [ [1, 0], [1, 1], [1, 2], [1, 3] ], right: [ [3, 0], [3, 1], [3, 2], [3, 3] ], down: [ [2, 4] ]                       }
+      ];
+      this.anchorBounds = [
+        {left: 0,  right: 6, bottom: 18},
+        {left: -2, right: 8, bottom: 16}
       ];
       this.anchor = [4, -1];
       break;
@@ -98,8 +105,12 @@ function Piece(type) {
         [ [2, 0], [2, 1], [3, 1], [3, 2] ],
       ];
       this.bounds = [
-        {left: -1, right: 6},
-        {left: -2, right: 6}
+        {left: [ [0, 2], [1, 1] ],            right: [ [3, 2], [4, 1] ],            down: [ [1, 3], [2, 3], [3, 2] ]  },
+        {left: [ [1, 0], [1, 1], [2, 2] ],    right: [ [3, 0], [4, 1], [4, 2] ],    down: [ [2, 2], [3, 3] ]          }
+      ];
+      this.anchorBounds = [
+        {left: -1, right: 6, bottom: 17},
+        {left: -2, right: 6, bottom: 17}
       ];
       this.anchor = [3, -1];
       break;
@@ -117,8 +128,12 @@ function Piece(type) {
         [ [2, 1], [2, 2], [3, 0], [3, 1] ],
       ];
       this.bounds = [
-        {left: -1, right: 6},
-        {left: -2, right: 6}
+        {left: [ [0, 1], [1, 2] ],            right: [ [3, 1], [4, 2] ],            down: [ [1, 2], [2, 3], [3, 3] ]  },
+        {left: [ [2, 0], [1, 1], [1, 2] ],    right: [ [4, 0], [4, 1], [3, 2] ],    down: [ [2, 3], [3, 2] ]          }
+      ];
+      this.anchorBounds = [
+        {left: -1, right: 6, bottom: 17},
+        {left: -2, right: 6, bottom: 17}
       ];
       this.anchor = [3, -1];
       break;
@@ -138,10 +153,16 @@ function Piece(type) {
         [ [1, 0], [2, 0], [2, 1], [2, 2] ]
       ];
       this.bounds = [
-        {left: -1, right: 6},
-        {left: -2, right: 6},
-        {left: -1, right: 6},
-        {left: -1, right: 7}
+        {left: [ [0, 1], [0, 2] ],            right: [ [2, 2], [4, 1] ],            down: [ [1, 3], [2, 2], [3, 2] ]  },
+        {left: [ [1, 0], [1, 1], [1, 2] ],    right: [ [3, 0], [3, 1], [4, 2] ],    down: [ [2, 3], [3, 3] ]          },
+        {left: [ [0, 1], [2, 0] ],            right: [ [4, 0], [4, 1] ],            down: [ [1, 2], [2, 2], [3,2] ]   },
+        {left: [ [0, 0], [1, 1], [1, 2] ],    right: [ [3, 0], [3, 1], [3, 2] ],    down: [ [1, 1], [2, 3] ]          }
+      ];
+      this.anchorBounds = [
+        {left: -1, right: 6, bottom: 17},
+        {left: -2, right: 6, bottom: 17},
+        {left: -1, right: 6, bottom: 18},
+        {left: -1, right: 7, bottom: 17}
       ];
       this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
@@ -161,10 +182,16 @@ function Piece(type) {
         [ [1, 2], [2, 0], [2, 1], [2, 2] ]
       ];
       this.bounds = [
-        {left: -1, right: 6},
-        {left: -2, right: 6},
-        {left: -1, right: 6},
-        {left: -1, right: 7}
+        {left: [ [0, 1], [2, 2] ],            right: [ [4, 1], [4, 2] ],            down: [ [1, 2], [2, 2], [3, 3] ]  },
+        {left: [ [1, 0], [1, 1], [1, 2] ],    right: [ [3, 1], [3, 2], [4, 0] ],    down: [ [2, 3], [3, 1] ]          },
+        {left: [ [0, 0], [0, 1] ],            right: [ [2, 0], [4, 1] ],            down: [ [1, 2], [2, 2], [3,2] ]   },
+        {left: [ [0, 2], [1, 0], [1, 1] ],    right: [ [3, 0], [3, 1], [3, 2] ],    down: [ [1, 3], [2, 3] ]          }
+      ];
+      this.anchorBounds = [
+        {left: -1, right: 6, bottom: 17},
+        {left: -2, right: 6, bottom: 17},
+        {left: -1, right: 6, bottom: 18},
+        {left: -1, right: 7, bottom: 17}
       ];
       this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
@@ -184,10 +211,16 @@ function Piece(type) {
         [ [1, 1], [2, 0], [2, 1], [2, 2] ]
       ];
       this.bounds = [
-        {left: -1, right: 6},
-        {left: -2, right: 6},
-        {left: -1, right: 6},
-        {left: -1, right: 7}
+        {left: [ [0, 1], [1, 2] ],            right: [ [3, 2], [4, 1] ],            down: [ [1, 2], [2, 3], [3,2] ]   },
+        {left: [ [1, 0], [1, 1], [1, 2] ],    right: [ [3, 0], [3, 2], [4, 1] ],    down: [ [2, 3], [3, 2] ]          },
+        {left: [ [0, 1], [1, 0] ],            right: [ [3, 0], [4, 1] ],            down: [ [1, 2], [2, 2], [3,2] ]   },
+        {left: [ [0, 1], [1, 0], [1, 2] ],    right: [ [3, 0], [3, 1], [3, 2] ],    down: [ [1, 2], [2, 3] ]          }
+      ];
+      this.anchorBounds = [
+        {left: -1, right: 6, bottom: 17},
+        {left: -2, right: 6, bottom: 17},
+        {left: -1, right: 6, bottom: 18},
+        {left: -1, right: 7, bottom: 17}
       ];
       this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
@@ -209,6 +242,20 @@ Piece.prototype.getBoardCoords = function() {
   ];
 };
 
+Piece.prototype.getBoundsBoardCoords = function(dir) {
+  var currentBoundsCoords = this.bounds[this.orientation][dir];
+  var boundsBoardCoords = [];
+
+  for (var coord of currentBoundsCoords) {
+    boundsBoardCoords.push([coord[0] + this.anchor[0], coord[1] + this.anchor[1]]);
+  }
+  return boundsBoardCoords;
+};
+
+Piece.prototype.getAnchorBounds = function() {
+  return this.anchorBounds[this.orientation];
+};
+
 Piece.prototype.getBounds = function() {
   return this.bounds[this.orientation];
 };
@@ -221,11 +268,11 @@ Piece.prototype.calculateCells = function() {
   var c = currentInternalCoords;
 
   console.log(` ORIENT: ${currentOrientation} `);
-  console.log(` ${this.anchor[1] + 0}   ${isIn([1,0], c) ? v : " "} ${isIn([2,0], c) ? v : " "} ${isIn([3,0], c) ? v : " "} `);
+  console.log(`                       ${this.anchor[0] + 0}       ${this.anchor[0] + 1}       ${this.anchor[0] + 2}       ${this.anchor[0] + 3}       `);
+  console.log(` ${this.anchor[1] + 0} ${isIn([0,0], c) ? v : " "} ${isIn([1,0], c) ? v : " "} ${isIn([2,0], c) ? v : " "} ${isIn([3,0], c) ? v : " "} `);
   console.log(` ${this.anchor[1] + 1} ${isIn([0,1], c) ? v : " "} ${isIn([1,1], c) ? v : " "} ${isIn([2,1], c) ? v : " "} ${isIn([3,1], c) ? v : " "} `);
-  console.log(` ${this.anchor[1] + 2}   ${isIn([1,2], c) ? v : " "} ${isIn([2,2], c) ? v : " "} ${isIn([3,2], c) ? v : " "} `);
-  console.log(` ${this.anchor[1] + 3}     ${isIn([2,3], c) ? v : " "}   `);
-  console.log(`   ${this.anchor[0] + 0} ${this.anchor[0] + 1} ${this.anchor[0] + 2} ${this.anchor[0] + 3} `);
+  console.log(` ${this.anchor[1] + 2} ${isIn([0,2], c) ? v : " "} ${isIn([1,2], c) ? v : " "} ${isIn([2,2], c) ? v : " "} ${isIn([3,2], c) ? v : " "} `);
+  console.log(` ${this.anchor[1] + 3} ${isIn([0,3], c) ? v : " "} ${isIn([1,3], c) ? v : " "} ${isIn([2,3], c) ? v : " "} ${isIn([3,3], c) ? v : " "} `);
 };
 
 Piece.prototype.rotate = function() {
@@ -244,7 +291,7 @@ Piece.prototype.rotate = function() {
 Piece.prototype.moveDown = function() {
   // TODO: determine if there is a occupied cell below
   // you, if so => board.lockPiece()
-  this.anchor[1]++;
+  if (board.isPieceMoveValid("down")) this.anchor[1]++;
 };
 
 // Moving left and right happens within bounds...
@@ -266,13 +313,14 @@ Piece.prototype.moveDown = function() {
 //                     ┗━━━━━━━┛
 
 Piece.prototype.moveLeft = function() {
+  var aBound = this.getAnchorBounds().left;
   var bound = this.getBounds().left;
-  if (this.anchor[0] > bound) this.anchor[0]--;
+  if (this.anchor[0] > aBound && board.isPieceMoveValid("left")) this.anchor[0]--;
 };
 
 Piece.prototype.moveRight = function() {
-  var bound = this.getBounds().right;
-  if (this.anchor[0] < bound) this.anchor[0]++;
+  var aBound = this.getAnchorBounds().right;
+  if (this.anchor[0] < aBound && board.isPieceMoveValid("right")) this.anchor[0]++;
 };
 
 Piece.random = function() {
@@ -294,8 +342,8 @@ var o = "O",
 // Board
 var board = {};
 
-board.upcomingPiece = Piece.random();
-board.currentPiece  = undefined;
+board.upcomingPiece; // = undefined;//Piece.random();
+board.currentPiece; //  = undefined;
 
 board.cells = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -320,18 +368,29 @@ board.cells = [
   [0, t, t, t, o, o, s, s, 0, 0]
 ];
 
+// updated on board.lockPiece
+board.playedCells = [];
+
+// call on game start
+// call to start next move with currentPiece
+// queue upcoming piece
 board.loadPiece = function() {
   board.currentPiece  = board.upcomingPiece;
   board.upcomingPiece = Piece.random();
 };
 
+
+// call once no more moves for current piece possible
+//    --> store the piece on the board
+//    --> call next piece in the queue (upcomingPiece) and make it the currentPiece
 board.lockPiece = function() {
   var pieceCells = board.currentPiece.getBoardCoords();
 
   for (var i = 0; i < 4; i++) {
     row = pieceCells[i][1];
     col = pieceCells[i][0];
-    board[row][col] = board.currentPiece.type;
+    board.cells[row][col] = board.currentPiece.type;
+    board.playedCells.push([row, col]);
   }
 
   // TODO: MD check for full rows, remove them and score
@@ -339,6 +398,23 @@ board.lockPiece = function() {
   board.loadPiece();
 };
 
+board.isPieceMoveValid = function (moveDir) {
+  var pieceBoundsCells = board.currentPiece.getBoundsBoardCoords(moveDir);
+  var predicate = true;
+  for (var playedCell of board.playedCells) {
+    if (isIn(playedCell.reverse(), pieceBoundsCells)) {
+      console.log("move is invalid....ignoring move....");
+      predicate = false;
+    }
+  }
+  if (!predicate) {
+    board.lockPiece();
+  }
+  return predicate;
+};
+
+
+// pretty print the current game state
 board.calculate = function() {
   var print = "";
 
@@ -358,6 +434,12 @@ board.calculate = function() {
 };
 
 
+
+
+
+
+
+/*************************************************************/
 
 // MODEL: Behavior
 

@@ -1,51 +1,73 @@
 html, body {
   height: 100%;
-  width: 100%;
+  margin: 0 auto;
+  background-color: #272822;
+  color: gray;
+  /*width: 100%;*/
 }
 
 div.main {
   height: 100%;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
 }
 
-#board {
-  margin: 0 auto;
-/*  height: 100%;
-  width: 100%;*/
+div.play-btn {
+  display: inline-block;
+  border: 1px solid gray;
+  text-align: center;
+  vertical-align: bottom;
+  margin-bottom: 5%;
+  font-size: 12pt;
+  font-family: Monaco;
+  width: 80px;
+  height: 40px;
+}
+
+table#board {
+  /*height: 100%;*/
+  margin: 5% auto;
+  text-align: center;
+  vertical-align: middle;
+  display: inline-block;
+  position: relative;
+  opacity: .75;
 
 }
 
 table .cell {
   box-sizing: border-box;
-  width: 50px;
-  height: 50px;
-  border: 1px solid red;
+  width: 40px;
+  height: 40px;
+  border: 1px solid gray;
 }
 
 .current-piece.type-o {
-  background-color: purple;
+  background-color: #d84795;
 }
 
 .current-piece.type-i {
-  background-color: green;
+  background-color: #0365a6;
 }
 
 .current-piece.type-l {
-  background-color: orange;
+  background-color: #008d4d;
 }
 
 .current-piece.type-j {
-  background-color: blue;
+  background-color: #d68115;
 }
 
 .current-piece.type-z {
-  background-color: yellow;
+  background-color: #d72917;
 }
 
 .current-piece.type-s {
-  background-color: magenta;
+  background-color: #8cf3ed;
 }
 
 .current-piece.type-t {
-  background-color: cyan;
+  background-color: #8ebbf9;
 }
 

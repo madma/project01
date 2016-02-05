@@ -3,8 +3,8 @@ console.log('main.js loaded!');
 // MODEL: Data Model
 var $well = $("#well"); // canvas object to contain played tetrominoes
 var wellEl = $well[0];
-var timer; // setInterval function that re-draws game at a given speed
-var speed; // speed to call setInterval
+var timer = undefined; // setInterval function that re-draws game at a given speed
+var speed = 500;// speed to call setInterval
 
 // MODEL: Data
 
@@ -442,8 +442,9 @@ board.lockPiece = function() {
 
   // TODO: MD check for full rows, remove them and score
   console.log("SCORE IS: " + clearedLines);
-
   board.loadPiece();
+  // render();
+
 };
 
 board.isPieceMoveValid = function (moveDir) {
@@ -491,6 +492,7 @@ var $cells = $("td");
 function render() {
   drawPlayedCells();
   drawCurrentPiece();
+
 
 }
 
@@ -548,11 +550,18 @@ function unDrawCurrentPiece() {
 function startGame() {
   playing = true;
   board.loadPiece();
+  tick()
+  timer = setInterval(tick, speed);
   render();
 
 }
 
-$(document).on("click", startGame);
+function tick() {
+  // board.unDrawCurrentPiece();
+  render();
+}
+
+$("div.play-btn").on("click", startGame);
 
 $(document).on("keyup", function(event) {
   if (playing) {

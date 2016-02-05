@@ -16,18 +16,31 @@
 
 ### Technologies
 <!-- lists and explanations of the technologies used -->
+* JavaScript
+* jQuery 
 
 ---
 
 ### Design
 <!-- the design approach taken -->
+* Tetris board is modeled as an array of arrays
+* Each Tetris piece and its variations are mapped to 4x4 grid
+	* Origin is at the top, left corner
+	* All transformations are performed on the Origin
+	* A piece's cell coordinates are calculated on each move with respect to the borders of the board and the previously played pieces to check for collisions
+	* If no valid moves are possible for the current piece, it is added to the board and the next piece is presented
 
 ---
 
 ### Get Started
 <!-- installation instructions -->
+Hit the button.
+
 
 ---
 
 ### Next Steps
 <!-- unsolved problems and/or planned features -->
+Score.
+Tick.
+View.

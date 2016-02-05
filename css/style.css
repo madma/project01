@@ -9,14 +9,43 @@ div.main {
 
 #board {
   margin: 0 auto;
-  height: 100%;
-  width: 100%;
+/*  height: 100%;
+  width: 100%;*/
 
 }
 
 table .cell {
   box-sizing: border-box;
-/*  width: 50px;
-  height: 50px;*/
+  width: 50px;
+  height: 50px;
   border: 1px solid red;
 }
+
+.current-piece.type-o {
+  background-color: purple;
+}
+
+.current-piece.type-i {
+  background-color: green;
+}
+
+.current-piece.type-l {
+  background-color: orange;
+}
+
+.current-piece.type-j {
+  background-color: blue;
+}
+
+.current-piece.type-z {
+  background-color: yellow;
+}
+
+.current-piece.type-s {
+  background-color: magenta;
+}
+
+.current-piece.type-t {
+  background-color: cyan;
+}
+

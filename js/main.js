@@ -9,7 +9,7 @@ var speed; // speed to call setInterval
 // MODEL: Data
 
 
-var currentPiece;
+//var currentPiece;
 
 var compare = function(a1, a2) {
   return a1.toString() === a2.toString();
@@ -26,11 +26,11 @@ var isIn = function(coord, listOfCoords) {
 
 
 function Piece(type) {
-  this.type = type.toUpperCase();
+  this.type = type.toLowerCase();
   this.orientation = 0;
 
   switch (this.type) {
-    case "O":
+    case "o":
 
       // ORIENTATION 0
       //   0 1 2 3
@@ -50,7 +50,7 @@ function Piece(type) {
       ];
       this.anchor = [4, -1];
       break;
-    case "I":
+    case "i":
 
       // ORIENTATION 0 // ORIENTATION 1
       //   0 1 2 3     //   0 1 2 3
@@ -73,7 +73,7 @@ function Piece(type) {
       ];
       this.anchor = [4, -1];
       break;
-    case "S":
+    case "s":
 
       // ORIENTATION 0 // ORIENTATION 1
       //   0 1 2 3     //   0 1 2 3
@@ -96,7 +96,7 @@ function Piece(type) {
       ];
       this.anchor = [3, -1];
       break;
-    case "Z":
+    case "z":
 
       // ORIENTATION 0  // ORIENTATION 1
       //   0 1 2 3      //   0 1 2 3
@@ -119,7 +119,7 @@ function Piece(type) {
       ];
       this.anchor = [3, -1];
       break;
-    case "L":
+    case "l":
 
       // ORIENTATION 0  // ORIENTATION 1  // ORIENTATION 2  // ORIENTATION 3
       //   0 1 2 3      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3
@@ -148,7 +148,7 @@ function Piece(type) {
       ];
       this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
-    case "J":
+    case "j":
 
       // ORIENTATION 0  // ORIENTATION 1  // ORIENTATION 2  // ORIENTATION 3
       //   0 1 2 3      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3
@@ -177,7 +177,7 @@ function Piece(type) {
       ];
       this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
-    case "T":
+    case "t":
 
       // ORIENTATION 0  // ORIENTATION 1  // ORIENTATION 2  // ORIENTATION 3
       //   0 1 2 3      //   0 1 2 3      //   0 1 2 3      //   0 1 2 3
@@ -257,16 +257,21 @@ Piece.prototype.calculateCells = function() {
   console.log(` ${this.anchor[1] + 3} ${isIn([0,3], c) ? v : " "} ${isIn([1,3], c) ? v : " "} ${isIn([2,3], c) ? v : " "} ${isIn([3,3], c) ? v : " "} `);
 };
 
-Piece.prototype.rotate = function() {
-  if (this.orientation < this.coords.length - 1) {
-    this.orientation++;
-  } else {
-    this.orientation = 0;
-  }
+// MOVE METHODS
 
-  // TODO: translate anchor based on bounds
-  // if anchor[x] > rightBound => anchor[x] = rightBound
-  // if anchor[x] < leftBound  => anchor[x] = leftBound
+Piece.prototype.rotate = function() {
+  // Set currentPiece's orientation to the next one
+  this.orientation = Number(this.orientation + 1) % this.coords.length;
+  // Check if next orientation moveDown is valid
+  // isPieceMoveValid method also checks if next orientation would cause
+  // a collision with a playedCell on the board
+  if (board.isPieceMoveValid("down")) {
+    return;
+  }
+  else {
+    this.orientation = Number(this.orientation + 3) % this.coords.length;
+    return;
+  }
 };
 
 
@@ -275,7 +280,11 @@ Piece.prototype.moveDown = function() {
   if (this.anchor[1] < aBound && board.isPieceMoveValid("down")) {
     this.anchor[1]++;
     console.log("moved the piece!");
-  } else board.lockPiece();
+  }
+  // Case: currentPiece has no possible valid move
+  else {
+    board.lockPiece();
+  }
 };
 
 // Moving left and right happens within bounds...
@@ -299,10 +308,18 @@ Piece.prototype.moveDown = function() {
 Piece.prototype.moveLeft = function() {
   var aBound = this.getAnchorBounds().left;
   var bound = this.getBounds().left;
+  // Case: currentPiece moveLeft is valid and it is still in play, i.e. moveDown is valid
   if (this.anchor[0] > aBound && board.isPieceMoveValid("left") && board.isPieceMoveValid("down")) {
     this.anchor[0]--;
     console.log("moved the piece!");
-  } else {
+  }
+  // Case: currentPiece with moveDown still valid and anchor still within its left bound
+  // but whose leftmost edge abuts a played piece
+  else if (this.anchor[0] < aBound && board.isPieceMoveValid("down")) {
+      return;
+  }
+  // Case: currentPiece has no possible valid move
+  else {
     console.log("no more moves...getting the next piece...");
     board.lockPiece();
   }
@@ -310,35 +327,36 @@ Piece.prototype.moveLeft = function() {
 
 Piece.prototype.moveRight = function() {
   var aBound = this.getAnchorBounds().right;
+  // Case: currentPiece moveRight is valid and it is still in play, i.e. moveDown is valid
   if (this.anchor[0] < aBound && board.isPieceMoveValid("right") && board.isPieceMoveValid("down")) {
     this.anchor[0]++;
     console.log("moved the piece!");
-  } else {
-    console.log("no more moves...getting the next piece...");
-    board.lockPiece();
+  }
+    // Case: currentPiece with moveDown still valid and anchor still within its right bound
+    // but whose rightmost edge abuts a played piece
+  else if (this.anchor[0] < aBound && board.isPieceMoveValid("down")) {
+      return;
+  }
+    // Case: currentPiece has no possible valid move
+  else {
+      console.log("no more moves...getting the next piece...");
+      board.lockPiece();
   }
 };
 
 Piece.random = function() {
-  var types = ["O", "I", "S", "Z", "L", "J", "T"];
+  var types = ["o", "i", "s", "z", "l", "j", "t"];
   var index =  Math.floor(Math.random()*types.length);
   return new Piece(types[index]);
 };
 
 
-// FIXME: MD remove after testing
-var o = "O",
-    t = "T",
-    s = "S",
-    z = "Z",
-    l = "L",
-    j = "J",
-    i = "I";
-
-// Board
+// BOARD
 var board = {};
 var playing = false;
 
+// upcomingPiece is the next Piece instance and is displayed to the player
+// currentPiece is the Piece instance in play--a piece is "in play" while it has valid moves
 board.upcomingPiece = Piece.random();
 board.currentPiece = undefined;
 
@@ -365,8 +383,20 @@ board.cells = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
-// updated on board.lockPiece
-board.playedCells = [];
+
+board.playedCells = {
+  o: [],
+  t: [],
+  s: [],
+  z: [],
+  l: [],
+  j: [],
+  i: [],
+  all: function() {
+    var all = [].concat(this.o, this.t, this.s, this.z, this.l, this.j, this.i);
+    return all;
+  }
+};
 
 // call on game start
 // call to start next move with currentPiece
@@ -387,7 +417,7 @@ board.lockPiece = function() {
     row = pieceCells[i][1];
     col = pieceCells[i][0];
     board.cells[row][col] = board.currentPiece.type;
-    board.playedCells.push([col, row]);
+    board.playedCells[board.currentPiece.type].push([col, row]);
   }
 
   // TODO: MD check for full rows, remove them and score
@@ -397,8 +427,10 @@ board.lockPiece = function() {
 
 board.isPieceMoveValid = function (moveDir) {
   var pieceBoundsCells = board.currentPiece.getBoundsBoardCoords(moveDir);
-  for (var playedCell of board.playedCells) {
-    if (isIn(playedCell, pieceBoundsCells)) {
+  var pieceCells = board.currentPiece.getBoardCoords();
+  var allPlayedCells = board.playedCells.all();
+  for (var playedCell of allPlayedCells) {
+    if (isIn(playedCell, pieceBoundsCells) || isIn(playedCell, pieceCells)) {
       console.log("move is invalid....ignoring move....");
       return false;
     }
@@ -436,15 +468,57 @@ var $cells = $("td");
 // User Interaction
 
 function render() {
+  drawPlayedCells();
+  drawCurrentPiece();
+
+}
+
+function drawPlayedCells() {
+  for (var row = 0; row < 20; row++) {
+    for (var col = 0; col < 10; col++) {
+      if (board.cells[row][col] != 0) {
+        var type = board.cells[row][col];
+        $("#col-" + col + "-row-" + row).addClass("current-piece type-" + type);
+      }
+    }
+  }
+}
+
+function drawLockCurrentPiece() {
+  unDrawCurrentPiece();
+  board.lockPiece();
+  var pieceCells = board.currentPiece.getBoardCoords();
+
+  for (var i = 0; i < 4; i++) {
+    row = pieceCells[i][1];
+    col = pieceCells[i][0];
+    board.cells[row][col] = board.currentPiece.type;
+    board.playedCells[board.currentPiece.type].push([col, row]);
+  }
+  render();
+
+  // TODO: MD check for full rows, remove them and score
 
 }
 
 function drawCurrentPiece() {
+  board.calculate();
   var pieceCells = board.currentPiece.getBoardCoords();
-
   for (var row = 0; row < 20; row++) {
     for (var col = 0; col < 10; col++) {
       if (isIn([col,row], pieceCells)) {
+        $("#col-" + col + "-row-" + row).addClass("current-piece type-" + board.currentPiece.type);
+      }
+    }
+  }
+}
+
+function unDrawCurrentPiece() {
+  var pieceCells = board.currentPiece.getBoardCoords();
+  for (var row = 0; row < 20; row++) {
+    for (var col = 0; col < 10; col++) {
+      if (isIn([col,row], pieceCells)) {
+        $("#col-" + col + "-row-" + row).removeClass("current-piece type-" + board.currentPiece.type);
       }
     }
   }
@@ -453,6 +527,7 @@ function drawCurrentPiece() {
 function startGame() {
   playing = true;
   board.loadPiece();
+  render();
 
 }
 
@@ -463,17 +538,27 @@ $(document).on("keyup", function(event) {
     switch (event.keyCode) {
       // ArrowLeft
       case 37:
+        unDrawCurrentPiece();
         board.currentPiece.moveLeft();
         render();
         break;
 
+      // ArrowUp
+      case 38:
+        unDrawCurrentPiece();
+        board.currentPiece.rotate();
+        render();
+
       // ArrowRight
       case 39:
+        unDrawCurrentPiece();
         board.currentPiece.moveRight();
+        render();
         break;
 
       // ArrowDown
       case 40:
+        unDrawCurrentPiece();
         board.currentPiece.moveDown();
         render();
         break;
@@ -483,30 +568,3 @@ $(document).on("keyup", function(event) {
     }
   }
 });
-
-
-
-/*
-Pseudo-code
-
-User starts a new game
-  Well clears
-  Initialize new tetromino
-  Tetromino begins falling at velocity vy from just above the top center of the well
-    Check that bottom, naked edges of tetromino do not collide with a played tetromino or bottom of well
-      If collide:
-        vy = 0
-        Check that well still has room for a new tetromino
-        If room:
-          trigger next tetromino
-      Else:
-        y += vy
-        draw()
-    User keys left(-) or right(+) arrow
-      Check that bounding box of Tetromino still within well
-        If within:
-          x += (+/-)well.width/10
-          draw()
-
-*/
-

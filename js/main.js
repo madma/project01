@@ -337,9 +337,10 @@ var o = "O",
 
 // Board
 var board = {};
+var playing = false;
 
-board.upcomingPiece; // = undefined;//Piece.random();
-board.currentPiece; //  = undefined;
+board.upcomingPiece = Piece.random();
+board.currentPiece = undefined;
 
 board.cells = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -426,40 +427,62 @@ board.calculate = function() {
 };
 
 
-// MODEL: Behavior
-
 
 
 // View
-
-window.addEventListener("keyup", function(event) {
-  console.log("added listener!");
-  console.log(event.keyCode);
-  switch (event.keyCode) {
-    case 37:
-      if (tetromino.x - sideLength >= 0) {
-        tetromino.x -= sideLength;
-      }
-      arrowPressed = "Left";
-      logIt("got Left", tetromino.x);
-      break;
-    case 39:
-      if (tetromino.x + sideLength + sideLength*4 <= wellEl.width) {
-        tetromino.x += sideLength;
-      }
-      arrowPressed = "Right";
-      logIt("got Right", tetromino.x);
-      break;
-    default:
-      return;
-  }
-
-  event.preventDefault();
-});
+var $cells = $("td");
 
 
 // User Interaction
 
+function render() {
+
+}
+
+function drawCurrentPiece() {
+  var pieceCells = board.currentPiece.getBoardCoords();
+
+  for (var row = 0; row < 20; row++) {
+    for (var col = 0; col < 10; col++) {
+      if (isIn([col,row], pieceCells)) {
+      }
+    }
+  }
+}
+
+function startGame() {
+  playing = true;
+  board.loadPiece();
+
+}
+
+$(document).on("click", startGame);
+
+$(document).on("keyup", function(event) {
+  if (playing) {
+    switch (event.keyCode) {
+      // ArrowLeft
+      case 37:
+        board.currentPiece.moveLeft();
+        render();
+        break;
+
+      // ArrowRight
+      case 39:
+        board.currentPiece.moveRight();
+        break;
+
+      // ArrowDown
+      case 40:
+        board.currentPiece.moveDown();
+        render();
+        break;
+
+      default:
+        return;
+    }
+  }
+});
 
 
 

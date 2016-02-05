@@ -457,6 +457,9 @@ board.isPieceMoveValid = function (moveDir) {
       return false;
     }
   }
+  // board.currentPiece.unDrawCurrentPiece();
+  unDrawCurrentPiece();
+  render();
   return true;
 };
 
@@ -490,6 +493,8 @@ var $cells = $("td");
 // User Interaction
 
 function render() {
+  // unDrawCurrentPiece();
+    // board.currentPiece.moveDown();
   drawPlayedCells();
   drawCurrentPiece();
 
@@ -540,9 +545,9 @@ function unDrawCurrentPiece() {
   var pieceCells = board.currentPiece.getBoardCoords();
   for (var row = 0; row < 20; row++) {
     for (var col = 0; col < 10; col++) {
-      if (isIn([col,row], pieceCells)) {
+      // if (isIn([col,row], pieceCells)) {
         $("#col-" + col + "-row-" + row).removeClass("current-piece type-" + board.currentPiece.type);
-      }
+      // }
     }
   }
 }
@@ -557,8 +562,9 @@ function startGame() {
 }
 
 function tick() {
-  // board.unDrawCurrentPiece();
-  render();
+  // unDrawCurrentPiece();
+  board.currentPiece.moveDown();
+  // render();
 }
 
 $("div.play-btn").on("click", startGame);

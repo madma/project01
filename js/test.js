@@ -268,7 +268,7 @@ Piece.prototype.calculateCells = function() {
   var c = currentInternalCoords;
 
   console.log(` ORIENT: ${currentOrientation} `);
-  console.log(`                       ${this.anchor[0] + 0}       ${this.anchor[0] + 1}       ${this.anchor[0] + 2}       ${this.anchor[0] + 3}       `);
+  console.log(`   ${this.anchor[0] + 0} ${this.anchor[0] + 1} ${this.anchor[0] + 2} ${this.anchor[0] + 3}       `);
   console.log(` ${this.anchor[1] + 0} ${isIn([0,0], c) ? v : " "} ${isIn([1,0], c) ? v : " "} ${isIn([2,0], c) ? v : " "} ${isIn([3,0], c) ? v : " "} `);
   console.log(` ${this.anchor[1] + 1} ${isIn([0,1], c) ? v : " "} ${isIn([1,1], c) ? v : " "} ${isIn([2,1], c) ? v : " "} ${isIn([3,1], c) ? v : " "} `);
   console.log(` ${this.anchor[1] + 2} ${isIn([0,2], c) ? v : " "} ${isIn([1,2], c) ? v : " "} ${isIn([2,2], c) ? v : " "} ${isIn([3,2], c) ? v : " "} `);
@@ -289,9 +289,11 @@ Piece.prototype.rotate = function() {
 
 
 Piece.prototype.moveDown = function() {
-  // TODO: determine if there is a occupied cell below
-  // you, if so => board.lockPiece()
-  if (board.isPieceMoveValid("down")) this.anchor[1]++;
+  var aBound = this.getAnchorBounds().bottom;
+  if (this.anchor[1] < aBound && board.isPieceMoveValid("down")) {
+    this.anchor[1]++;
+    console.log("moved the piece!");
+  } else board.lockPiece();
 };
 
 // Moving left and right happens within bounds...
@@ -315,12 +317,24 @@ Piece.prototype.moveDown = function() {
 Piece.prototype.moveLeft = function() {
   var aBound = this.getAnchorBounds().left;
   var bound = this.getBounds().left;
-  if (this.anchor[0] > aBound && board.isPieceMoveValid("left")) this.anchor[0]--;
+  if (this.anchor[0] > aBound && board.isPieceMoveValid("left") && board.isPieceMoveValid("down")) {
+    this.anchor[0]--;
+    console.log("moved the piece!");
+  } else {
+    console.log("no more moves...getting the next piece...");
+    board.lockPiece();
+  }
 };
 
 Piece.prototype.moveRight = function() {
   var aBound = this.getAnchorBounds().right;
-  if (this.anchor[0] < aBound && board.isPieceMoveValid("right")) this.anchor[0]++;
+  if (this.anchor[0] < aBound && board.isPieceMoveValid("right") && board.isPieceMoveValid("down")) {
+    this.anchor[0]++;
+    console.log("moved the piece!");
+  } else {
+    console.log("no more moves...getting the next piece...");
+    board.lockPiece();
+  }
 };
 
 Piece.random = function() {
@@ -364,8 +378,8 @@ board.cells = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, t, 0, o, o, 0, s, s, 0],
-  [0, t, t, t, o, o, s, s, 0, 0]
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
 // updated on board.lockPiece
@@ -390,7 +404,7 @@ board.lockPiece = function() {
     row = pieceCells[i][1];
     col = pieceCells[i][0];
     board.cells[row][col] = board.currentPiece.type;
-    board.playedCells.push([row, col]);
+    board.playedCells.push([col, row]);
   }
 
   // TODO: MD check for full rows, remove them and score
@@ -400,17 +414,13 @@ board.lockPiece = function() {
 
 board.isPieceMoveValid = function (moveDir) {
   var pieceBoundsCells = board.currentPiece.getBoundsBoardCoords(moveDir);
-  var predicate = true;
   for (var playedCell of board.playedCells) {
-    if (isIn(playedCell.reverse(), pieceBoundsCells)) {
+    if (isIn(playedCell, pieceBoundsCells)) {
       console.log("move is invalid....ignoring move....");
-      predicate = false;
+      return false;
     }
   }
-  if (!predicate) {
-    board.lockPiece();
-  }
-  return predicate;
+  return true;
 };
 
 

@@ -207,6 +207,7 @@ function Piece(type) {
       this.anchor = [3, -1]; // starts at orientation 3???? TODO: MD
       break;
   }
+  return;
 }
 
 Piece.prototype.getInternalCoords = function() {
@@ -280,10 +281,12 @@ Piece.prototype.moveDown = function() {
   if (this.anchor[1] < aBound && board.isPieceMoveValid("down")) {
     this.anchor[1]++;
     console.log("moved the piece!");
+    return;
   }
   // Case: currentPiece has no possible valid move
   else {
     board.lockPiece();
+    return;
   }
 };
 
@@ -312,16 +315,18 @@ Piece.prototype.moveLeft = function() {
   if (this.anchor[0] > aBound && board.isPieceMoveValid("left") && board.isPieceMoveValid("down")) {
     this.anchor[0]--;
     console.log("moved the piece!");
+    return;
   }
   // Case: currentPiece with moveDown still valid and anchor still within its left bound
   // but whose leftmost edge abuts a played piece
-  else if (this.anchor[0] < aBound && board.isPieceMoveValid("down")) {
+  else if (this.anchor[0] >= aBound && board.isPieceMoveValid("down")) {
       return;
   }
   // Case: currentPiece has no possible valid move
   else {
     console.log("no more moves...getting the next piece...");
     board.lockPiece();
+    return;
   }
 };
 
@@ -331,16 +336,18 @@ Piece.prototype.moveRight = function() {
   if (this.anchor[0] < aBound && board.isPieceMoveValid("right") && board.isPieceMoveValid("down")) {
     this.anchor[0]++;
     console.log("moved the piece!");
+    return;
   }
     // Case: currentPiece with moveDown still valid and anchor still within its right bound
     // but whose rightmost edge abuts a played piece
-  else if (this.anchor[0] < aBound && board.isPieceMoveValid("down")) {
+  else if (this.anchor[0] <= aBound && board.isPieceMoveValid("down")) {
       return;
   }
     // Case: currentPiece has no possible valid move
   else {
       console.log("no more moves...getting the next piece...");
       board.lockPiece();
+    return;
   }
 };
 
@@ -352,6 +359,7 @@ Piece.random = function() {
 
 
 // BOARD
+var clearedLines = 0;
 var board = {};
 var playing = false;
 
@@ -420,7 +428,20 @@ board.lockPiece = function() {
     board.playedCells[board.currentPiece.type].push([col, row]);
   }
 
+  recheck: for (var row = 0; row < board.cells.length; row++) {
+    if (board.cells[row].reduce((prev, curr) => prev + curr) > 0) {
+      clearedLines+=1;
+      console.log(clearedLines);
+      board.cells.splice(row, 1);
+      board.cells.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+      console.log(board.cells);
+      render();
+      continue recheck;
+    }
+  }
+
   // TODO: MD check for full rows, remove them and score
+  console.log("SCORE IS: " + clearedLines);
 
   board.loadPiece();
 };

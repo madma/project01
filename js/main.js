@@ -428,15 +428,19 @@ board.lockPiece = function() {
     board.playedCells[board.currentPiece.type].push([col, row]);
   }
 
-  recheck: for (var row = 0; row < board.cells.length; row++) {
-    if (board.cells[row].reduce((prev, curr) => prev + curr) > 0) {
-      clearedLines+=1;
+  recheck:
+  for (var row = 0; row < board.cells.length; row++) {
+    console.log("SCORE FOR ROW " + row + " IS: " + board.cells[row].reduce((prev, curr) => prev + curr));
+    if (board.cells[row].indexOf(0) < 0) {
+      clearedLines++;
+      console.log("CLEARED A LINE!!!!!! SCORE IS :" + clearedLines);
       console.log(clearedLines);
       board.cells.splice(row, 1);
       board.cells.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
       console.log(board.cells);
+      board.drawPlayedCells();
       render();
-      continue recheck;
+      break recheck;
     }
   }
 
@@ -493,7 +497,7 @@ var $cells = $("td");
 // User Interaction
 
 function render() {
-  // unDrawCurrentPiece();
+  unDrawCurrentPiece();
     // board.currentPiece.moveDown();
   drawPlayedCells();
   drawCurrentPiece();
@@ -555,8 +559,8 @@ function unDrawCurrentPiece() {
 function startGame() {
   playing = true;
   board.loadPiece();
-  tick()
-  timer = setInterval(tick, speed);
+  // tick()
+  // timer = setInterval(tick, speed);
   render();
 
 }
@@ -584,6 +588,7 @@ $(document).on("keyup", function(event) {
         unDrawCurrentPiece();
         board.currentPiece.rotate();
         render();
+        break;
 
       // ArrowRight
       case 39:

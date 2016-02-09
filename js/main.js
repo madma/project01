@@ -391,6 +391,17 @@ board.cells = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
+board.getPlayedCells = function() {
+  var playedCells = [];
+  for (var row of board.cells) {
+    for (var typeValue of row) {
+      if (typeValue !== 0) {
+        playedCells.push([row.index(), typeValue.index()]);
+      }
+    }
+  }
+}
+
 
 board.playedCells = {
   o: [],

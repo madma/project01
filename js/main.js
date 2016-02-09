@@ -406,6 +406,19 @@ board.playedCells = {
   }
 };
 
+board.updatePlayedCellsOnScore = function(rowCleared) {
+  var types = ["o", "i", "s", "z", "l", "j", "t"];
+  for (var i = 0; i < rowCleared; i++) {
+    for (var type of types) {
+      for (var coord of board.playedCells[type]) {
+        if (coord[1] < rowCleared) {
+          coord[1]++;
+        }
+      }
+    }
+  }
+}
+
 // call on game start
 // call to start next move with currentPiece
 // queue upcoming piece
@@ -427,6 +440,7 @@ board.lockPiece = function() {
     board.cells[row][col] = board.currentPiece.type;
     board.playedCells[board.currentPiece.type].push([col, row]);
   }
+  board.loadPiece();
 
   recheck:
   for (var row = 0; row < board.cells.length; row++) {
@@ -437,17 +451,17 @@ board.lockPiece = function() {
       console.log(clearedLines);
       board.cells.splice(row, 1);
       board.cells.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+      board.updatePlayedCellsOnScore(row);
+      console.log("NEW CELLS ARE: ");
       console.log(board.cells);
-      board.drawPlayedCells();
-      render();
+      // render();
       break recheck;
     }
   }
 
   // TODO: MD check for full rows, remove them and score
   console.log("SCORE IS: " + clearedLines);
-  board.loadPiece();
-  // render();
+  render();
 
 };
 
@@ -461,7 +475,6 @@ board.isPieceMoveValid = function (moveDir) {
       return false;
     }
   }
-  // board.currentPiece.unDrawCurrentPiece();
   unDrawCurrentPiece();
   render();
   return true;
@@ -498,6 +511,7 @@ var $cells = $("td");
 
 function render() {
   unDrawCurrentPiece();
+  unDrawPlayedCells();
     // board.currentPiece.moveDown();
   drawPlayedCells();
   drawCurrentPiece();
@@ -511,6 +525,17 @@ function drawPlayedCells() {
       if (board.cells[row][col] != 0) {
         var type = board.cells[row][col];
         $("#col-" + col + "-row-" + row).addClass("current-piece type-" + type);
+      }
+    }
+  }
+}
+
+function unDrawPlayedCells() {
+  for (var row = 0; row < 20; row++) {
+    for (var col = 0; col < 10; col++) {
+      if (board.cells[row][col] != 0) {
+        var type = board.cells[row][col];
+        $("#col-" + col + "-row-" + row).removeClass("current-piece type-" + type);
       }
     }
   }

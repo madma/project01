@@ -463,10 +463,10 @@ board.lockPiece = function() {
       console.log(clearedLines);
       board.cells.splice(row, 1);
       board.cells.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-      board.updatePlayedCellsOnScore(row);
+      // board.updatePlayedCellsOnScore(row);
       console.log("NEW CELLS ARE: ");
       console.log(board.cells);
-      // render();
+      render();
       break recheck;
     }
   }
@@ -596,16 +596,16 @@ function unDrawCurrentPiece() {
 function startGame() {
   playing = true;
   board.loadPiece();
-  // tick()
-  // timer = setInterval(tick, speed);
+  tick()
+  timer = setInterval(tick, speed);
   render();
 
 }
 
 function tick() {
-  // unDrawCurrentPiece();
+  unDrawCurrentPiece();
   board.currentPiece.moveDown();
-  // render();
+  render();
 }
 
 $("div.play-btn").on("click", startGame);

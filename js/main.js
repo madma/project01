@@ -393,14 +393,15 @@ board.cells = [
 
 board.getPlayedCells = function() {
   var playedCells = [];
-  for (var row of board.cells) {
-    for (var typeValue of row) {
-      if (typeValue !== 0) {
-        playedCells.push([row.index(), typeValue.index()]);
+  for (var i = 0; i < board.cells.length; i++) {
+    for (var j = 0; j < board.cells[i].length; j++) {
+      if (board.cells[i][j] !== 0) {
+        playedCells.push([j, i]);
       }
     }
   }
-}
+  return playedCells;
+};
 
 
 board.playedCells = {
@@ -479,7 +480,7 @@ board.lockPiece = function() {
 board.isPieceMoveValid = function (moveDir) {
   var pieceBoundsCells = board.currentPiece.getBoundsBoardCoords(moveDir);
   var pieceCells = board.currentPiece.getBoardCoords();
-  var allPlayedCells = board.playedCells.all();
+  var allPlayedCells = board.getPlayedCells();
   for (var playedCell of allPlayedCells) {
     if (isIn(playedCell, pieceBoundsCells) || isIn(playedCell, pieceCells)) {
       console.log("move is invalid....ignoring move....");

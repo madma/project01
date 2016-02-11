@@ -404,33 +404,6 @@ board.getPlayedCells = function() {
 };
 
 
-board.playedCells = {
-  o: [],
-  t: [],
-  s: [],
-  z: [],
-  l: [],
-  j: [],
-  i: [],
-  all: function() {
-    var all = [].concat(this.o, this.t, this.s, this.z, this.l, this.j, this.i);
-    return all;
-  }
-};
-
-board.updatePlayedCellsOnScore = function(rowCleared) {
-  var types = ["o", "i", "s", "z", "l", "j", "t"];
-  for (var i = 0; i < rowCleared; i++) {
-    for (var type of types) {
-      for (var coord of board.playedCells[type]) {
-        if (coord[1] < rowCleared) {
-          coord[1]++;
-        }
-      }
-    }
-  }
-}
-
 // call on game start
 // call to start next move with currentPiece
 // queue upcoming piece
@@ -450,7 +423,6 @@ board.lockPiece = function() {
     row = pieceCells[i][1];
     col = pieceCells[i][0];
     board.cells[row][col] = board.currentPiece.type;
-    board.playedCells[board.currentPiece.type].push([col, row]);
   }
   board.loadPiece();
 
@@ -463,7 +435,6 @@ board.lockPiece = function() {
       console.log(clearedLines);
       board.cells.splice(row, 1);
       board.cells.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-      // board.updatePlayedCellsOnScore(row);
       console.log("NEW CELLS ARE: ");
       console.log(board.cells);
       render();
@@ -562,12 +533,8 @@ function drawLockCurrentPiece() {
     row = pieceCells[i][1];
     col = pieceCells[i][0];
     board.cells[row][col] = board.currentPiece.type;
-    board.playedCells[board.currentPiece.type].push([col, row]);
   }
   render();
-
-  // TODO: MD check for full rows, remove them and score
-
 }
 
 function drawCurrentPiece() {
